@@ -1556,6 +1556,33 @@ inline void command::gcli_proc_Init(command::gcli_proc& parent) {
     parent.timeout = i32(0);
     parent.status = i32(0);
 }
+inline command::helloworld::helloworld() {
+    command::helloworld_Init(*this);
+}
+
+
+// --- command.helloworld..Init
+// Set all fields to initial values.
+inline void command::helloworld_Init(command::helloworld& parent) {
+    parent.in = algo::strptr("data");
+}
+inline command::helloworld_proc::helloworld_proc() {
+    command::helloworld_proc_Init(*this);
+}
+
+inline command::helloworld_proc::~helloworld_proc() {
+    command::helloworld_proc_Uninit(*this);
+}
+
+
+// --- command.helloworld_proc..Init
+// Set all fields to initial values.
+inline void command::helloworld_proc_Init(command::helloworld_proc& parent) {
+    parent.path = algo::strptr("bin/helloworld");
+    parent.pid = pid_t(0);
+    parent.timeout = i32(0);
+    parent.status = i32(0);
+}
 inline command::lib_ctype::lib_ctype() {
     command::lib_ctype_Init(*this);
 }

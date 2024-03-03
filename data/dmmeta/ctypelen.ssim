@@ -708,6 +708,7 @@ dmmeta.ctypelen  ctype:command.bash2html  len:24  alignment:8  padbytes:7
 dmmeta.ctypelen  ctype:command.bash_proc  len:96  alignment:8  padbytes:4
 dmmeta.ctypelen  ctype:command.gcache  len:72  alignment:8  padbytes:7
 dmmeta.ctypelen  ctype:command.gcli  len:352  alignment:8  padbytes:24
+dmmeta.ctypelen  ctype:command.helloworld  len:16  alignment:8  padbytes:0
 dmmeta.ctypelen  ctype:command.lib_ctype  len:16  alignment:8  padbytes:0
 dmmeta.ctypelen  ctype:command.lib_exec  len:12  alignment:4  padbytes:5
 dmmeta.ctypelen  ctype:command.mdbg  len:160  alignment:8  padbytes:17
@@ -958,6 +959,7 @@ dmmeta.ctypelen  ctype:gclidb.Mrjob  len:488  alignment:8  padbytes:4
 dmmeta.ctypelen  ctype:gclidb.Mrnote  len:304  alignment:8  padbytes:4
 dmmeta.ctypelen  ctype:gclidb.Project  len:52  alignment:1  padbytes:0
 dmmeta.ctypelen  ctype:gclidb.User  len:72  alignment:8  padbytes:0
+dmmeta.ctypelen  ctype:helloworld.FDb  len:24  alignment:8  padbytes:7
 dmmeta.ctypelen  ctype:ietf.Ipport  len:6  alignment:1  padbytes:0
 dmmeta.ctypelen  ctype:ietf.Ipv4  len:4  alignment:1  padbytes:0
 dmmeta.ctypelen  ctype:ietf.Ipv4Addr  len:4  alignment:1  padbytes:0

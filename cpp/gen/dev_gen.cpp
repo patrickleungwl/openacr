@@ -115,6 +115,7 @@ const char *dev_Target_target_atf_unit       = "atf_unit";
 const char *dev_Target_target_bash2html      = "bash2html";
 const char *dev_Target_target_gcache         = "gcache";
 const char *dev_Target_target_gcli           = "gcli";
+const char *dev_Target_target_helloworld     = "helloworld";
 const char *dev_Target_target_lib_amcdb      = "lib_amcdb";
 const char *dev_Target_target_lib_ams        = "lib_ams";
 const char *dev_Target_target_lib_ctype      = "lib_ctype";

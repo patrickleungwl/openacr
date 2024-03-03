@@ -216,6 +216,7 @@ extern const char *  dev_Target_target_atf_unit;       // atf_unit        fconst
 extern const char *  dev_Target_target_bash2html;      // bash2html       fconst:dev.Target.target/bash2html
 extern const char *  dev_Target_target_gcache;         // gcache          fconst:dev.Target.target/gcache
 extern const char *  dev_Target_target_gcli;           // gcli            fconst:dev.Target.target/gcli
+extern const char *  dev_Target_target_helloworld;     // helloworld      fconst:dev.Target.target/helloworld
 extern const char *  dev_Target_target_lib_amcdb;      // lib_amcdb       fconst:dev.Target.target/lib_amcdb
 extern const char *  dev_Target_target_lib_ams;        // lib_ams         fconst:dev.Target.target/lib_ams
 extern const char *  dev_Target_target_lib_ctype;      // lib_ctype       fconst:dev.Target.target/lib_ctype

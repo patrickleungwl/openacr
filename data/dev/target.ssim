@@ -25,6 +25,7 @@ dev.target  target:atf_unit  compat:%-%.%-%
 dev.target  target:bash2html  compat:%-%.%-%
 dev.target  target:gcache  compat:Linux-%.%-%
 dev.target  target:gcli  compat:Linux-%.%-%
+dev.target  target:helloworld  compat:Linux-%.%-%
 dev.target  target:lib_amcdb  compat:Linux-%.%-%
 dev.target  target:lib_ams  compat:"(Linux-%g%|CYGWIN_NT-cl).%-%"
 dev.target  target:lib_ctype  compat:%-%.%-%

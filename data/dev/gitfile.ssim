@@ -72,6 +72,7 @@ dev.gitfile  gitfile:bin/git-rollback-file
 dev.gitfile  gitfile:bin/git-update-config
 dev.gitfile  gitfile:bin/gitconfig-setup
 dev.gitfile  gitfile:bin/grephunk
+dev.gitfile  gitfile:bin/helloworld
 dev.gitfile  gitfile:bin/hilite
 dev.gitfile  gitfile:bin/hilite-error
 dev.gitfile  gitfile:bin/indent-recent
@@ -363,6 +364,7 @@ dev.gitfile  gitfile:cpp/gen/fmdb_gen.cpp
 dev.gitfile  gitfile:cpp/gen/gcache_gen.cpp
 dev.gitfile  gitfile:cpp/gen/gcli_gen.cpp
 dev.gitfile  gitfile:cpp/gen/gclidb_gen.cpp
+dev.gitfile  gitfile:cpp/gen/helloworld_gen.cpp
 dev.gitfile  gitfile:cpp/gen/ietf_gen.cpp
 dev.gitfile  gitfile:cpp/gen/lib_amcdb_gen.cpp
 dev.gitfile  gitfile:cpp/gen/lib_ams_gen.cpp
@@ -389,6 +391,7 @@ dev.gitfile  gitfile:cpp/gen/ssim2mysql_gen.cpp
 dev.gitfile  gitfile:cpp/gen/ssimfilt_gen.cpp
 dev.gitfile  gitfile:cpp/gen/strconv_gen.cpp
 dev.gitfile  gitfile:cpp/gen/sv2ssim_gen.cpp
+dev.gitfile  gitfile:cpp/helloworld/helloworld.cpp
 dev.gitfile  gitfile:cpp/lib/algo/arg.cpp
 dev.gitfile  gitfile:cpp/lib/algo/backtrace.cpp
 dev.gitfile  gitfile:cpp/lib/algo/base64.cpp
@@ -760,6 +763,8 @@ dev.gitfile  gitfile:include/gen/gcli_gen.h
 dev.gitfile  gitfile:include/gen/gcli_gen.inl.h
 dev.gitfile  gitfile:include/gen/gclidb_gen.h
 dev.gitfile  gitfile:include/gen/gclidb_gen.inl.h
+dev.gitfile  gitfile:include/gen/helloworld_gen.h
+dev.gitfile  gitfile:include/gen/helloworld_gen.inl.h
 dev.gitfile  gitfile:include/gen/ietf_gen.h
 dev.gitfile  gitfile:include/gen/ietf_gen.inl.h
 dev.gitfile  gitfile:include/gen/lib_amcdb_gen.h
@@ -812,6 +817,7 @@ dev.gitfile  gitfile:include/gen/strconv_gen.h
 dev.gitfile  gitfile:include/gen/strconv_gen.inl.h
 dev.gitfile  gitfile:include/gen/sv2ssim_gen.h
 dev.gitfile  gitfile:include/gen/sv2ssim_gen.inl.h
+dev.gitfile  gitfile:include/helloworld.h
 dev.gitfile  gitfile:include/lib_amcdb.h
 dev.gitfile  gitfile:include/lib_ams.h
 dev.gitfile  gitfile:include/lib_ctype.h
@@ -1073,6 +1079,7 @@ dev.gitfile  gitfile:txt/directory-structure.md
 dev.gitfile  gitfile:txt/fm.md
 dev.gitfile  gitfile:txt/gcache.md
 dev.gitfile  gitfile:txt/gcli.md
+dev.gitfile  gitfile:txt/helloworld.md
 dev.gitfile  gitfile:txt/iohook.md
 dev.gitfile  gitfile:txt/mdbg.md
 dev.gitfile  gitfile:txt/mysql2ssim.md

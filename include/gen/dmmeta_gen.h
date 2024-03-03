@@ -248,6 +248,7 @@ extern const char *  dmmeta_Ns_ns_fmdb;           // fmdb            fconst:dmme
 extern const char *  dmmeta_Ns_ns_gcache;         // gcache          fconst:dmmeta.Ns.ns/gcache
 extern const char *  dmmeta_Ns_ns_gcli;           // gcli            fconst:dmmeta.Ns.ns/gcli
 extern const char *  dmmeta_Ns_ns_gclidb;         // gclidb          fconst:dmmeta.Ns.ns/gclidb
+extern const char *  dmmeta_Ns_ns_helloworld;     // helloworld      fconst:dmmeta.Ns.ns/helloworld
 extern const char *  dmmeta_Ns_ns_ietf;           // ietf            fconst:dmmeta.Ns.ns/ietf
 extern const char *  dmmeta_Ns_ns_lib_amcdb;      // lib_amcdb       fconst:dmmeta.Ns.ns/lib_amcdb
 extern const char *  dmmeta_Ns_ns_lib_ams;        // lib_ams         fconst:dmmeta.Ns.ns/lib_ams

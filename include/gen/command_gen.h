@@ -442,6 +442,8 @@ namespace command { struct gcache; }
 namespace command { struct gcache_proc; }
 namespace command { struct gcli; }
 namespace command { struct gcli_proc; }
+namespace command { struct helloworld; }
+namespace command { struct helloworld_proc; }
 namespace command { struct lib_ctype; }
 namespace command { struct lib_exec; }
 namespace command { struct mdbg; }
@@ -3279,6 +3281,70 @@ algo::tempstr        gcli_ToCmdline(command::gcli_proc& parent) __attribute__((n
 // Set all fields to initial values.
 void                 gcli_proc_Init(command::gcli_proc& parent);
 void                 gcli_proc_Uninit(command::gcli_proc& parent) __attribute__((nothrow));
+
+// --- command.helloworld
+// access: command.helloworld_proc.helloworld (Exec)
+struct helloworld { // command.helloworld
+    algo::cstring   in;   //   "data"  Input directory or filename, - for stdin
+    helloworld();
+};
+
+bool                 helloworld_ReadFieldMaybe(command::helloworld &parent, algo::strptr field, algo::strptr strval) __attribute__((nothrow));
+// Read fields of command::helloworld from attributes of ascii tuple TUPLE
+bool                 helloworld_ReadTupleMaybe(command::helloworld &parent, algo::Tuple &tuple) __attribute__((nothrow));
+// Set all fields to initial values.
+void                 helloworld_Init(command::helloworld& parent);
+// print command-line args of command::helloworld to string  -- cprint:command.helloworld.Argv
+void                 helloworld_PrintArgv(command::helloworld & row, algo::cstring &str) __attribute__((nothrow));
+// Convenience function that returns a full command line
+// Assume command is in a directory called bin
+tempstr              helloworld_ToCmdline(command::helloworld & row) __attribute__((nothrow));
+// Used with command lines
+// Return # of command-line arguments that must follow this argument
+// If FIELD is invalid, return -1
+i32                  helloworld_NArgs(command::FieldId field, algo::strptr& out_dflt, bool* out_anon) __attribute__((nothrow));
+
+// --- command.helloworld_proc
+struct helloworld_proc { // command.helloworld_proc: Subprocess: 
+    algo::cstring         path;      //   "bin/helloworld"  path for executable
+    command::helloworld   cmd;       // command line for child process
+    algo::cstring         fstdin;    // redirect for stdin
+    algo::cstring         fstdout;   // redirect for stdout
+    algo::cstring         fstderr;   // redirect for stderr
+    pid_t                 pid;       //   0  pid of running child process
+    i32                   timeout;   //   0  optional timeout for child process
+    i32                   status;    //   0  last exit status of child process
+    helloworld_proc();
+    ~helloworld_proc();
+private:
+    // reftype Exec of command.helloworld_proc.helloworld prohibits copy
+    helloworld_proc(const helloworld_proc&){ /*disallow copy constructor */}
+    void operator =(const helloworld_proc&){ /*disallow direct assignment */}
+};
+
+// Start subprocess
+// If subprocess already running, do nothing. Otherwise, start it
+int                  helloworld_Start(command::helloworld_proc& parent) __attribute__((nothrow));
+// Start subprocess & Read output
+algo::Fildes         helloworld_StartRead(command::helloworld_proc& parent, algo_lib::FFildes &read) __attribute__((nothrow));
+// Kill subprocess and wait
+void                 helloworld_Kill(command::helloworld_proc& parent);
+// Wait for subprocess to return
+void                 helloworld_Wait(command::helloworld_proc& parent) __attribute__((nothrow));
+// Start + Wait
+// Execute subprocess and return exit code
+int                  helloworld_Exec(command::helloworld_proc& parent) __attribute__((nothrow));
+// Start + Wait, throw exception on error
+// Execute subprocess; throw human-readable exception on error
+void                 helloworld_ExecX(command::helloworld_proc& parent);
+// Call execv()
+// Call execv with specified parameters -- cprint:helloworld.Argv
+int                  helloworld_Execv(command::helloworld_proc& parent) __attribute__((nothrow));
+algo::tempstr        helloworld_ToCmdline(command::helloworld_proc& parent) __attribute__((nothrow));
+
+// Set all fields to initial values.
+void                 helloworld_proc_Init(command::helloworld_proc& parent);
+void                 helloworld_proc_Uninit(command::helloworld_proc& parent) __attribute__((nothrow));
 
 // --- command.lib_ctype
 struct lib_ctype { // command.lib_ctype

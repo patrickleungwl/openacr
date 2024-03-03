@@ -14408,6 +14408,229 @@ void command::gcli_proc_Uninit(command::gcli_proc& parent) {
     gcli_Kill(parent); // kill child, ensure forward progress
 }
 
+// --- command.helloworld..ReadFieldMaybe
+bool command::helloworld_ReadFieldMaybe(command::helloworld &parent, algo::strptr field, algo::strptr strval) {
+    command::FieldId field_id;
+    (void)value_SetStrptrMaybe(field_id,field);
+    bool retval = true; // default is no error
+    switch(field_id) {
+        case command_FieldId_in: retval = algo::cstring_ReadStrptrMaybe(parent.in, strval); break;
+        default: break;
+    }
+    if (!retval) {
+        algo_lib::AppendErrtext("attr",field);
+    }
+    return retval;
+}
+
+// --- command.helloworld..ReadTupleMaybe
+// Read fields of command::helloworld from attributes of ascii tuple TUPLE
+bool command::helloworld_ReadTupleMaybe(command::helloworld &parent, algo::Tuple &tuple) {
+    bool retval = true;
+    ind_beg(algo::Tuple_attrs_curs,attr,tuple) {
+        retval = helloworld_ReadFieldMaybe(parent, attr.name, attr.value);
+        if (!retval) {
+            break;
+        }
+    }ind_end;
+    return retval;
+}
+
+// --- command.helloworld..PrintArgv
+// print command-line args of command::helloworld to string  -- cprint:command.helloworld.Argv
+void command::helloworld_PrintArgv(command::helloworld & row, algo::cstring &str) {
+    algo::tempstr temp;
+    (void)temp;
+    (void)row;
+    (void)str;
+    if (!(row.in == "data")) {
+        ch_RemoveAll(temp);
+        cstring_Print(row.in, temp);
+        str << " -in:";
+        strptr_PrintBash(temp,str);
+    }
+}
+
+// --- command.helloworld..ToCmdline
+// Convenience function that returns a full command line
+// Assume command is in a directory called bin
+tempstr command::helloworld_ToCmdline(command::helloworld & row) {
+    tempstr ret;
+    ret << "bin/helloworld ";
+    helloworld_PrintArgv(row, ret);
+    // inherit less intense verbose, debug options
+    for (int i = 1; i < algo_lib::_db.cmdline.verbose; i++) {
+        ret << " -verbose";
+    }
+    for (int i = 1; i < algo_lib::_db.cmdline.debug; i++) {
+        ret << " -debug";
+    }
+    return ret;
+}
+
+// --- command.helloworld..NArgs
+// Used with command lines
+// Return # of command-line arguments that must follow this argument
+// If FIELD is invalid, return -1
+i32 command::helloworld_NArgs(command::FieldId field, algo::strptr& out_dflt, bool* out_anon) {
+    i32 retval = 1;
+    switch (field) {
+        case command_FieldId_in: { // $comment
+            *out_anon = false;
+        } break;
+        default:
+        retval=-1; // unrecognized
+    }
+    (void)out_dflt;//only to avoid -Wunused-parameter
+    return retval;
+}
+
+// --- command.helloworld_proc.helloworld.Start
+// Start subprocess
+// If subprocess already running, do nothing. Otherwise, start it
+int command::helloworld_Start(command::helloworld_proc& parent) {
+    int retval = 0;
+    if (parent.pid == 0) {
+        verblog(helloworld_ToCmdline(parent)); // maybe print command
+#ifdef WIN32
+        algo_lib::ResolveExecFname(parent.path);
+        tempstr cmdline(helloworld_ToCmdline(parent));
+        parent.pid = dospawn(Zeroterm(parent.path),Zeroterm(cmdline),parent.timeout,parent.fstdin,parent.fstdout,parent.fstderr);
+#else
+        parent.pid = fork();
+        if (parent.pid == 0) { // child
+            algo_lib::DieWithParent();
+            if (parent.timeout > 0) {
+                alarm(parent.timeout);
+            }
+            if (retval==0) retval=algo_lib::ApplyRedirect(parent.fstdin , 0);
+            if (retval==0) retval=algo_lib::ApplyRedirect(parent.fstdout, 1);
+            if (retval==0) retval=algo_lib::ApplyRedirect(parent.fstderr, 2);
+            if (retval==0) retval= helloworld_Execv(parent);
+            if (retval != 0) { // if start fails, print error
+                int err=errno;
+                prerr("command.helloworld_execv"
+                <<Keyval("errno",err)
+                <<Keyval("errstr",strerror(err))
+                <<Keyval("comment","Execv failed"));
+            }
+            _exit(127); // if failed to start, exit anyway
+        } else if (parent.pid == -1) {
+            retval = errno; // failed to fork
+        }
+#endif
+    }
+    parent.status = parent.pid > 0 ? 0 : -1; // if didn't start, set error status
+    return retval;
+}
+
+// --- command.helloworld_proc.helloworld.StartRead
+// Start subprocess & Read output
+algo::Fildes command::helloworld_StartRead(command::helloworld_proc& parent, algo_lib::FFildes &read) {
+    int pipefd[2];
+    int rc=pipe(pipefd);
+    (void)rc;
+    read.fd.value = pipefd[0];
+    parent.fstdout  << ">&" << pipefd[1];
+    helloworld_Start(parent);
+    (void)close(pipefd[1]);
+    return read.fd;
+}
+
+// --- command.helloworld_proc.helloworld.Kill
+// Kill subprocess and wait
+void command::helloworld_Kill(command::helloworld_proc& parent) {
+    if (parent.pid != 0) {
+        kill(parent.pid,9);
+        helloworld_Wait(parent);
+    }
+}
+
+// --- command.helloworld_proc.helloworld.Wait
+// Wait for subprocess to return
+void command::helloworld_Wait(command::helloworld_proc& parent) {
+    if (parent.pid > 0) {
+        int wait_flags = 0;
+        int wait_status = 0;
+        int rc = -1;
+        do {
+            // really wait for subprocess to exit
+            rc = waitpid(parent.pid,&wait_status,wait_flags);
+        } while (rc==-1 && errno==EINTR);
+        if (rc == parent.pid) {
+            parent.status = wait_status;
+            parent.pid = 0;
+        }
+    }
+}
+
+// --- command.helloworld_proc.helloworld.Exec
+// Start + Wait
+// Execute subprocess and return exit code
+int command::helloworld_Exec(command::helloworld_proc& parent) {
+    helloworld_Start(parent);
+    helloworld_Wait(parent);
+    return parent.status;
+}
+
+// --- command.helloworld_proc.helloworld.ExecX
+// Start + Wait, throw exception on error
+// Execute subprocess; throw human-readable exception on error
+void command::helloworld_ExecX(command::helloworld_proc& parent) {
+    int rc = helloworld_Exec(parent);
+    vrfy(rc==0, tempstr() << "algo_lib.exec" << Keyval("cmd",helloworld_ToCmdline(parent))
+    << Keyval("comment",algo::DescribeWaitStatus(parent.status)));
+}
+
+// --- command.helloworld_proc.helloworld.Execv
+// Call execv()
+// Call execv with specified parameters -- cprint:helloworld.Argv
+int command::helloworld_Execv(command::helloworld_proc& parent) {
+    algo_lib::exec_args_Alloc() << parent.path;
+
+    if (parent.cmd.in != "data") {
+        cstring *arg = &algo_lib::exec_args_Alloc();
+        *arg << "-in:";
+        cstring_Print(parent.cmd.in, *arg);
+    }
+    for (int i=1; i < algo_lib::_db.cmdline.verbose; ++i) {
+        algo_lib::exec_args_Alloc() << "-verbose";
+    }
+    char **argv = (char**)alloca((algo_lib::exec_args_N()+1)*sizeof(*argv));
+    ind_beg(algo_lib::_db_exec_args_curs,arg,algo_lib::_db) {
+        argv[ind_curs(arg).index] = Zeroterm(arg);
+    }ind_end;
+    argv[algo_lib::exec_args_N()] = NULL;
+    // if parent.path is relative, search for it in PATH
+    algo_lib::ResolveExecFname(parent.path);
+    return execv(Zeroterm(parent.path),argv);
+}
+
+// --- command.helloworld_proc.helloworld.ToCmdline
+algo::tempstr command::helloworld_ToCmdline(command::helloworld_proc& parent) {
+    algo::tempstr retval;
+    retval << parent.path << " ";
+    command::helloworld_PrintArgv(parent.cmd,retval);
+    if (ch_N(parent.fstdin)) {
+        retval << " " << parent.fstdin;
+    }
+    if (ch_N(parent.fstdout)) {
+        retval << " " << parent.fstdout;
+    }
+    if (ch_N(parent.fstderr)) {
+        retval << " 2" << parent.fstderr;
+    }
+    return retval;
+}
+
+// --- command.helloworld_proc..Uninit
+void command::helloworld_proc_Uninit(command::helloworld_proc& parent) {
+    command::helloworld_proc &row = parent; (void)row;
+
+    // command.helloworld_proc.helloworld.Uninit (Exec)  //
+    helloworld_Kill(parent); // kill child, ensure forward progress
+}
+
 // --- command.lib_ctype..ReadFieldMaybe
 bool command::lib_ctype_ReadFieldMaybe(command::lib_ctype &parent, algo::strptr field, algo::strptr strval) {
     command::FieldId field_id;
